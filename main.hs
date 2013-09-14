@@ -3,17 +3,23 @@
 module Main
 where
 
+import Control.Monad (replicateM_)
+import Control.Monad.Trans (liftIO)
+import Control.Concurrent (threadDelay)
 import System.Environment (getArgs)
 import Data.ByteString.Char8 (pack)
-import Control.Distributed.Process (say, Process, spawnLink, RemoteTable)
-import Control.Distributed.Process.Node (newLocalNode, initRemoteTable, runProcess, localNodeId, LocalNode(..))
 import Control.Distributed.Process.Internal.Types (NodeId(..))
 import Control.Distributed.Process.Closure (mkClosure, remotable)
-import Control.Concurrent (threadDelay)
 import Network.Transport (EndPointAddress(..))
 import Network.Transport.TCP (defaultTCPParameters, createTransport)
-import Control.Monad (replicateM_)
-import Control.Monad.Trans  (liftIO)
+import Control.Distributed.Process (say, Process, spawnLink, RemoteTable)
+import Control.Distributed.Process.Node
+  ( newLocalNode
+  , initRemoteTable
+  , runProcess
+  , localNodeId
+  , LocalNode(..)
+  )
 
 sleepSeconds :: Int -> IO ()
 sleepSeconds n = threadDelay (1000000 * n)

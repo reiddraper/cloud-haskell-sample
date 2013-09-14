@@ -18,8 +18,7 @@ cabal-version:       >=1.10
 
 executable sample
   main-is: main.hs
-  -- other-modules:
-  -- other-extensions:
+  ghc-options: -Wall
   build-depends:       base >=4.6 && <4.7,
                        mtl == 2.1.2,
                        bytestring == 0.10.0.2,
