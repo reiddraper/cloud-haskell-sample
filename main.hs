@@ -79,7 +79,6 @@ usage = concat ["First, start a follower:\n",
                  "Now type a message and a number of times for it to print:\n",
                  "foo 10\n"]
 
-
 main :: IO ()
 main = do
   args <- getArgs
