@@ -12,5 +12,5 @@ cd cloud-haskell-sample
 cabal sandbox init
 cabal install --only-dependencies
 cabal build
-cabal run sample
+cabal run sample # this will print the usage
 ```
