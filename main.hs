@@ -64,12 +64,12 @@ rtable = __remoteTable initRemoteTable
 
 usage :: String
 usage = concat ["First, start a follower:\n",
-                 "./test follower localhost 20000\n",
+                 "./sample follower localhost 20000\n",
                  "this will print out a node id, like: ",
                  "nid://localhost:20000:0\n",
                  "copy this id (minus the nid:// bit)\n",
                  "and start the leader:\n",
-                 "./test leader localhost 5001 localhost:20000:0\n",
+                 "./sample leader localhost 5001 localhost:20000:0\n",
                  "Now type a message and a number of times for it to print:\n",
                  "foo 10\n"]
 

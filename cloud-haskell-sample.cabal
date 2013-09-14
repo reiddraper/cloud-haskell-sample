@@ -16,7 +16,7 @@ build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10
 
-executable cloud-haskell-sample
+executable sample
   main-is: main.hs
   -- other-modules:
   -- other-extensions:
