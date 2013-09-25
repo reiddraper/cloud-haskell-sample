@@ -3,16 +3,12 @@
 module Main
 where
 
+import Control.Concurrent (threadDelay)
 import Control.Monad (replicateM_)
 import Control.Monad.Trans (liftIO)
-import Control.Concurrent (threadDelay)
-import System.Environment (getArgs)
-import Data.ByteString.Char8 (pack)
-import Control.Distributed.Process.Internal.Types (NodeId(..))
-import Control.Distributed.Process.Closure (mkClosure, remotable)
-import Network.Transport (EndPointAddress(..))
-import Network.Transport.TCP (defaultTCPParameters, createTransport)
 import Control.Distributed.Process (say, Process, spawnLink, RemoteTable)
+import Control.Distributed.Process.Closure (mkClosure, remotable)
+import Control.Distributed.Process.Internal.Types (NodeId(..))
 import Control.Distributed.Process.Node
   ( newLocalNode
   , initRemoteTable
@@ -20,6 +16,11 @@ import Control.Distributed.Process.Node
   , localNodeId
   , LocalNode(..)
   )
+import Data.ByteString.Char8 (pack)
+import Network.Transport (EndPointAddress(..))
+import Network.Transport.TCP (defaultTCPParameters, createTransport)
+import System.Environment (getArgs)
+import Text.Read (readMaybe)
 
 sleepSeconds :: Int -> IO ()
 sleepSeconds n = threadDelay (1000000 * n)
@@ -49,9 +50,18 @@ leaderProcess localNode remoteNode =
       go = do
         line <- liftIO getLine
         let [m, n] = words line
-        liftIO $ print (m, n)
-        _ <- spawnLink remoteNode ($(mkClosure 'printProcess) (m, read n :: Int))
+            number = readMaybe n :: Maybe Int
+        case number of
+          (Just actualNumber) -> mySpawn remoteNode m actualNumber
+          _ -> liftIO $ putStr usage
         go
+
+mySpawn :: NodeId -> String -> Int -> Process ()
+mySpawn remoteNode m n =
+  if n < 0 then (liftIO $ print "Value for N must be > 0") >> return ()
+           else do _ <- spawnLink remoteNode ($(mkClosure 'printProcess) (m, n))
+                   liftIO $ print ("Sending " ++ m ++ " " ++ show n ++ " times")
+                   return ()
 
 startLeader :: String -> String -> String -> IO ()
 startLeader host port followerAddress = do
